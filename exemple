@@ -2619,17 +2619,6 @@ function library:Init(Config)
 			local colorPickerContainer = Instance.new("Frame")
 			local colorPickerContainerCorner = Instance.new("UICorner")
 			local colorPickerContainerStroke = Instance.new("UIStroke")
-			local colorWheel = Instance.new("ImageLabel")
-			local colorWheelCorner = Instance.new("UICorner")
-			local colorWheelSelector = Instance.new("Frame")
-			local colorWheelSelectorCorner = Instance.new("UICorner")
-			local colorWheelSelectorStroke = Instance.new("UIStroke")
-			local brightnessSlider = Instance.new("Frame")
-			local brightnessSliderCorner = Instance.new("UICorner")
-			local brightnessGradient = Instance.new("UIGradient")
-			local brightnessSelector = Instance.new("Frame")
-			local brightnessSelectorCorner = Instance.new("UICorner")
-			local brightnessSelectorStroke = Instance.new("UIStroke")
 			local rgbFrame = Instance.new("Frame")
 			local rgbLayout = Instance.new("UIListLayout")
 			local rLabel = Instance.new("TextLabel")
@@ -2715,79 +2704,11 @@ function library:Init(Config)
 			colorPickerContainerStroke.Color = library.lightGray
 			colorPickerContainerStroke.Parent = colorPickerContainer
 
-			colorWheel.Parent = colorPickerContainer
-			colorWheel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			colorWheel.BackgroundTransparency = 1.000
-			colorWheel.Position = UDim2.new(0, 6, 0, 6)
-			colorWheel.Size = UDim2.new(0, 150, 0, 150)
-			colorWheel.Image = "https://raw.githubusercontent.com/SWIMHUBISWIMMING/swimhub/main/grad180d.png"
-
-			colorWheelCorner.CornerRadius = UDim.new(0, 2)
-			colorWheelCorner.Parent = colorWheel
-
-			-- Добавляем TextButton поверх ImageLabel для обработки кликов
-			local colorWheelButton = Instance.new("TextButton")
-			colorWheelButton.Parent = colorWheel
-			colorWheelButton.BackgroundTransparency = 1
-			colorWheelButton.Text = ""
-			colorWheelButton.Size = UDim2.new(1, 0, 1, 0)
-			colorWheelButton.ZIndex = 1
-			colorWheelButton.Active = true
-
-			colorWheelSelector.Parent = colorWheel
-			colorWheelSelector.AnchorPoint = Vector2.new(0.5, 0.5)
-			colorWheelSelector.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			colorWheelSelector.BackgroundTransparency = 0.3
-			colorWheelSelector.BorderSizePixel = 0
-			colorWheelSelector.Size = UDim2.new(0, 8, 0, 8)
-			colorWheelSelector.ZIndex = 10
-
-			colorWheelSelectorCorner.CornerRadius = UDim.new(0, 4)
-			colorWheelSelectorCorner.Parent = colorWheelSelector
-
-			colorWheelSelectorStroke.Thickness = 2
-			colorWheelSelectorStroke.Color = Color3.fromRGB(0, 0, 0)
-			colorWheelSelectorStroke.Parent = colorWheelSelector
-
-			brightnessSlider.Parent = colorPickerContainer
-			brightnessSlider.AnchorPoint = Vector2.new(0, 0.5)
-			brightnessSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			brightnessSlider.BackgroundTransparency = 0
-			brightnessSlider.Position = UDim2.new(0, 162, 0, 75)
-			brightnessSlider.Size = UDim2.new(0, 20, 0, 150)
-			brightnessSlider.BorderSizePixel = 0
-
-			brightnessSliderCorner.CornerRadius = UDim.new(0, 2)
-			brightnessSliderCorner.Parent = brightnessSlider
-
-			brightnessGradient.Color = ColorSequence.new{
-				ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-				ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))
-			}
-			brightnessGradient.Rotation = 90
-			brightnessGradient.Parent = brightnessSlider
-
-			brightnessSelector.Parent = brightnessSlider
-			brightnessSelector.AnchorPoint = Vector2.new(0.5, 0.5)
-			brightnessSelector.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			brightnessSelector.BackgroundTransparency = 1.000
-			brightnessSelector.BorderSizePixel = 0
-			brightnessSelector.Position = UDim2.new(0.5, 0, 0.5, 0)
-			brightnessSelector.Size = UDim2.new(1, 4, 0, 4)
-			brightnessSelector.ZIndex = 2
-
-			brightnessSelectorCorner.CornerRadius = UDim.new(0, 2)
-			brightnessSelectorCorner.Parent = brightnessSelector
-
-			brightnessSelectorStroke.Thickness = 2
-			brightnessSelectorStroke.Color = Color3.fromRGB(255, 255, 255)
-			brightnessSelectorStroke.Parent = brightnessSelector
-
 			rgbFrame.Parent = colorPickerContainer
 			rgbFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			rgbFrame.BackgroundTransparency = 1.000
-			rgbFrame.Position = UDim2.new(0, 188, 0, 6)
-			rgbFrame.Size = UDim2.new(0, 202, 0, 150)
+			rgbFrame.Position = UDim2.new(0, 6, 0, 6)
+			rgbFrame.Size = UDim2.new(1, -12, 0, 0)
 
 			rgbLayout.Parent = rgbFrame
 			rgbLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -2840,7 +2761,6 @@ function library:Init(Config)
 
 			local currentColor = default
 			local isOpen = false
-			local hue, sat, val = 0, 0, 1
 
 			local function updateColorFromRGB()
 				local r = math.clamp(tonumber(rBox.Text) or 0, 0, 255)
@@ -2848,32 +2768,7 @@ function library:Init(Config)
 				local b = math.clamp(tonumber(bBox.Text) or 0, 0, 255)
 				currentColor = Color3.fromRGB(r, g, b)
 				colorDisplay.BackgroundColor3 = currentColor
-				hue, sat, val = Color3.toHSV(currentColor)
 				callback(currentColor)
-			end
-
-			local function updateColorFromHSV()
-				currentColor = Color3.fromHSV(hue, sat, val)
-				colorDisplay.BackgroundColor3 = currentColor
-				local r, g, b = math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255)
-				rBox.Text = tostring(r)
-				gBox.Text = tostring(g)
-				bBox.Text = tostring(b)
-				callback(currentColor)
-			end
-
-			local function updateWheelSelector()
-				local wheelSize = colorWheel.AbsoluteSize.X
-				local radius = wheelSize / 2
-				local angle = hue * 2 * math.pi
-				local distance = sat * radius
-				local centerX = radius
-				local centerY = radius
-				colorWheelSelector.Position = UDim2.new(0, centerX + math.cos(angle) * distance - 4, 0, centerY + math.sin(angle) * distance - 4)
-			end
-
-			local function updateBrightnessSelector()
-				brightnessSelector.Position = UDim2.new(0.5, 0, val, 0)
 			end
 
 			rBox.FocusLost:Connect(function()
@@ -2886,97 +2781,21 @@ function library:Init(Config)
 				updateColorFromRGB()
 			end)
 
-			local function handleWheelInput()
-				local mousePos = UserInputService:GetMouseLocation()
-				local wheelPos = colorWheel.AbsolutePosition
-				local wheelSize = colorWheel.AbsoluteSize
-				
-				-- Проверяем, что клик внутри колеса
-				if mousePos.X >= wheelPos.X and mousePos.X <= wheelPos.X + wheelSize.X and
-				   mousePos.Y >= wheelPos.Y and mousePos.Y <= wheelPos.Y + wheelSize.Y then
-					
-					local centerX = wheelPos.X + wheelSize.X / 2
-					local centerY = wheelPos.Y + wheelSize.Y / 2
-					local radius = wheelSize.X / 2
-					
-					local dx = mousePos.X - centerX
-					local dy = mousePos.Y - centerY
-					local distance = math.sqrt(dx * dx + dy * dy)
-					
-					if distance <= radius then
-						sat = math.clamp(distance / radius, 0, 1)
-						hue = (math.atan2(dy, dx) / (2 * math.pi)) % 1
-						updateWheelSelector()
-						updateColorFromHSV()
-					end
-				end
-			end
-
-			local function handleBrightnessInput()
-				local mousePos = UserInputService:GetMouseLocation()
-				local sliderPos = brightnessSlider.AbsolutePosition
-				local sliderSize = brightnessSlider.AbsoluteSize
-				val = math.clamp((mousePos.Y - sliderPos.Y) / sliderSize.Y, 0, 1)
-				updateBrightnessSelector()
-				updateColorFromHSV()
-			end
-
-			-- Обработка кликов на цветовом колесе
-			local isDraggingWheel = false
-			local isDraggingBrightness = false
-			
-			colorWheelButton.MouseButton1Down:Connect(function()
-				isDraggingWheel = true
-				handleWheelInput()
-			end)
-			
-			colorWheelButton.MouseButton1Up:Connect(function()
-				isDraggingWheel = false
-			end)
-			
-			-- Обработка движения мыши при перетаскивании
-			UserInputService.InputChanged:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseMovement then
-					if isDraggingWheel then
-						handleWheelInput()
-					elseif isDraggingBrightness then
-						handleBrightnessInput()
-					end
-				end
-			end)
-			
-			-- Обработка кликов на слайдере яркости
-			brightnessSlider.MouseButton1Down:Connect(function()
-				isDraggingBrightness = true
-				handleBrightnessInput()
-			end)
-			
-			brightnessSlider.MouseButton1Up:Connect(function()
-				isDraggingBrightness = false
-			end)
-			
-			-- Обработка отпускания мыши в любом месте
-			UserInputService.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					isDraggingWheel = false
-					isDraggingBrightness = false
-				end
-			end)
-
-			hue, sat, val = Color3.toHSV(default)
-			updateWheelSelector()
-			updateBrightnessSelector()
-			updateColorFromHSV()
+			-- Инициализация с цветом по умолчанию
+			local r, g, b = math.floor(default.R * 255), math.floor(default.G * 255), math.floor(default.B * 255)
+			rBox.Text = tostring(r)
+			gBox.Text = tostring(g)
+			bBox.Text = tostring(b)
 
 			colorPickerButton.MouseButton1Click:Connect(function()
 				isOpen = not isOpen
 				colorPickerContainer.Visible = isOpen
 				if isOpen then
 					TweenService:Create(colorPickerContainer, TweenWrapper.Styles["colorpicker"], {
-						Size = UDim2.new(1, 0, 0, 162)
+						Size = UDim2.new(1, 0, 0, 80)
 					}):Play()
 					TweenService:Create(colorPickerFrame, TweenWrapper.Styles["colorpicker"], {
-						Size = UDim2.new(0, 396, 0, 186)
+						Size = UDim2.new(0, 396, 0, 104)
 					}):Play()
 				else
 					TweenService:Create(colorPickerContainer, TweenWrapper.Styles["colorpicker"], {
@@ -2992,10 +2811,10 @@ function library:Init(Config)
 			function ColorPickerFunctions:SetColor(color)
 				currentColor = color
 				colorDisplay.BackgroundColor3 = currentColor
-				hue, sat, val = Color3.toHSV(currentColor)
-				updateWheelSelector()
-				updateBrightnessSelector()
-				updateColorFromHSV()
+				local r, g, b = math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255)
+				rBox.Text = tostring(r)
+				gBox.Text = tostring(g)
+				bBox.Text = tostring(b)
 				return self
 			end
 
