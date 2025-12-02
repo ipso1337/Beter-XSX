@@ -1,1 +1,218 @@
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/ipso1337/Beter-XSX/refs/heads/main/libary'))()
+
+--/ Changable Colors (Optional)
+
+library.headerColor = Color3.fromRGB(51, 158, 190)
+
+library.companyColor = Color3.fromRGB(163, 151, 255)
+
+library.acientColor = Color3.fromRGB(159, 115, 255)
+
+--/ Activate library
+
+--/ Required configuation (Check the xsx lib.lua for more configuation options)
+
+library:Init({
+
+    version = "3.2",
+
+    title = "Depso UI demo",
+
+    company = "Depso",
+
+    keybind = Enum.KeyCode.RightShift, -- (Optional, automatically sets the best keybind)
+
+    BlurEffect = true,
+
+})
+
+--/ Watermarks
+
+library:Watermark("Depso")
+
+local FPSWatermark = library:Watermark("FPS")
+
+game:GetService("RunService").RenderStepped:Connect(function(v)
+
+    FPSWatermark:SetText("FPS: "..math.round(1/v))
+
+end)
+
+--/ Intro (Optional)
+
+library:BeginIntroduction()
+
+library:AddIntroductionMessage("Searching for addresses...")
+
+wait(1)
+
+library:AddIntroductionMessage("Successfully found addresses!")
+
+wait(1)
+
+library:EndIntroduction()
+
+local Tab1 = library:NewTab("Example tab")
+
+Tab1:NewSection("Example Components")
+
+local Label1 = Tab1:NewLabel("Example label", "left") -- "left", "center", "right"
+
+--/ Toggle
+
+local Toggle1 = Tab1:NewToggle("Example toggle", false, function(value)
+
+    local vers = value and "on" or "off"
+
+    print("one " .. vers)
+
+end):AddKeybind(Enum.KeyCode.RightControl)
+
+print("Toggle1 value:", Toggle1:GetValue())
+
+--/ Button
+
+local Button1 = Tab1:NewButton("Button", function()
+
+    print("Hello world - Button")
+
+end)
+
+local Button1 = Tab1:NewButton("Notification", function()
+
+    library:Notify("Hello world!", 3)
+
+    library:Notify("Hello world!", 3, "success")
+
+    library:Notify("Hello world!", 3, "alert")
+
+    library:Notify("Hello world!", 3, "error")
+
+end)
+
+--/ Keybind
+
+local Keybind1 = Tab1:NewKeybind("Keybind 1", Enum.KeyCode.RightAlt, function(key)
+
+    library:SetKeybind(Enum.KeyCode[key])
+
+end)
+
+--/ [ Text boxes ]
+
+--/ Small
+
+local Textbox1 = Tab1:NewTextbox("Text box [small]", "Default Text", "PlaceHolder: 1", "small", true, false, function(val)
+
+    print(val)
+
+end)
+
+--/ Medium
+
+local Textbox2 = Tab1:NewTextbox("Text box [medium]", "", "2", "medium", true, false, function(val)
+
+    print(val)
+
+end)
+
+--/ Large
+
+local Textbox3 = Tab1:NewTextbox("Text box [large]", "", "3", "large", true, false, function(val)
+
+    print(val)
+
+end)
+
+--/ Selector
+
+local Selector1 = Tab1:NewSelector("Selector 1", "bungie", {"A", "B", "C", "D"}, function(d)
+
+    print(d)
+
+end):AddOption("What the dog doing?")
+
+--/ Number Slider
+
+local Slider1 = Tab1:NewSlider("Slider 1", "", true, "/", {min = 1, max = 100, default = 20})
+
+print("Slider value:", Slider1:GetValue())
+
+--/ Color Picker Examples
+
+Tab1:NewSection("Color Picker Examples")
+
+--/ Basic Color Picker
+
+local ColorPicker1 = Tab1:NewColorPicker("Background Color", Color3.fromRGB(255, 0, 0), function(color)
+
+    print("Selected color:", color)
+
+    print("RGB:", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
+
+end)
+
+--/ Color Picker with default color
+
+local ColorPicker2 = Tab1:NewColorPicker("Text Color", Color3.fromRGB(0, 255, 0), function(color)
+
+    print("Text color changed to:", color)
+
+end)
+
+--/ Color Picker - Get current color
+
+local ColorPicker3 = Tab1:NewColorPicker("Accent Color", Color3.fromRGB(0, 0, 255), function(color)
+
+    print("Accent color:", color)
+
+end)
+
+--/ Example: Change color programmatically
+
+wait(2)
+
+ColorPicker3:SetColor(Color3.fromRGB(255, 255, 0))
+
+print("ColorPicker3 current color:", ColorPicker3:GetColor())
+
+--/ Example: Update color picker text
+
+ColorPicker1:SetText("Main Background Color")
+
+--/ Example: Hide/Show color picker
+
+-- ColorPicker2:Hide()
+
+-- wait(2)
+
+-- ColorPicker2:Show()
+
+--/ Type-writer title
+
+local HeaderString = "Bozo-Softworks"
+
+local Time = 1
+
+Time = Time/(#HeaderString*2)
+
+while wait() do
+
+    for i = 0, #HeaderString do
+
+        library:SetCompany(HeaderString:sub(1, i))
+
+        wait(Time)
+
+    end
+
+    for i = #HeaderString, 1, -1  do
+
+        library:SetCompany(HeaderString:sub(1, i))
+
+        wait(Time)
+
+    end
+
+end
 
