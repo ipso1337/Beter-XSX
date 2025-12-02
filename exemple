@@ -2619,8 +2619,26 @@ function library:Init(Config)
 			local colorPickerContainer = Instance.new("Frame")
 			local colorPickerContainerCorner = Instance.new("UICorner")
 			local colorPickerContainerStroke = Instance.new("UIStroke")
+			
+			-- SatVib Map (карта насыщенности и яркости)
+			local satVibMapOuter = Instance.new("Frame")
+			local satVibMapInner = Instance.new("Frame")
+			local satVibMap = Instance.new("ImageLabel")
+			local cursorOuter = Instance.new("Frame")
+			local cursorInner = Instance.new("Frame")
+			
+			-- Hue Selector (селектор оттенка)
+			local hueSelectorOuter = Instance.new("Frame")
+			local hueSelectorInner = Instance.new("Frame")
+			local hueSelectorGradient = Instance.new("UIGradient")
+			local hueCursor = Instance.new("Frame")
+			
+			-- RGB и HEX поля
 			local rgbFrame = Instance.new("Frame")
 			local rgbLayout = Instance.new("UIListLayout")
+			local hexBox = Instance.new("TextBox")
+			local hexBoxOuter = Instance.new("Frame")
+			local hexBoxInner = Instance.new("Frame")
 			local rLabel = Instance.new("TextLabel")
 			local rBox = Instance.new("TextBox")
 			local rBoxCorner = Instance.new("UICorner")
@@ -2704,15 +2722,108 @@ function library:Init(Config)
 			colorPickerContainerStroke.Color = library.lightGray
 			colorPickerContainerStroke.Parent = colorPickerContainer
 
+			-- SatVib Map (карта насыщенности и яркости)
+			satVibMapOuter.Parent = colorPickerContainer
+			satVibMapOuter.BorderColor3 = Color3.new(0, 0, 0)
+			satVibMapOuter.Position = UDim2.new(0, 6, 0, 6)
+			satVibMapOuter.Size = UDim2.new(0, 150, 0, 150)
+			satVibMapOuter.ZIndex = 5
+
+			satVibMapInner.Parent = satVibMapOuter
+			satVibMapInner.BackgroundColor3 = library.darkGray
+			satVibMapInner.BorderColor3 = library.lightGray
+			satVibMapInner.Size = UDim2.new(1, 0, 1, 0)
+
+			satVibMap.Parent = satVibMapInner
+			satVibMap.BorderSizePixel = 0
+			satVibMap.Size = UDim2.new(1, 0, 1, 0)
+			satVibMap.Image = "rbxassetid://4155801252"
+			satVibMap.ZIndex = 6
+
+			cursorOuter.Parent = satVibMap
+			cursorOuter.AnchorPoint = Vector2.new(0.5, 0.5)
+			cursorOuter.Size = UDim2.new(0, 8, 0, 8)
+			cursorOuter.BackgroundTransparency = 1
+			cursorOuter.BorderSizePixel = 2
+			cursorOuter.BorderColor3 = Color3.new(0, 0, 0)
+			cursorOuter.ZIndex = 7
+
+			local cursorOuterCorner = Instance.new("UICorner")
+			cursorOuterCorner.CornerRadius = UDim.new(0, 4)
+			cursorOuterCorner.Parent = cursorOuter
+
+			cursorInner.Parent = cursorOuter
+			cursorInner.Size = UDim2.new(0, 4, 0, 4)
+			cursorInner.Position = UDim2.new(0.5, 0, 0.5, 0)
+			cursorInner.AnchorPoint = Vector2.new(0.5, 0.5)
+			cursorInner.BackgroundColor3 = Color3.new(1, 1, 1)
+			cursorInner.BorderSizePixel = 1
+			cursorInner.BorderColor3 = Color3.new(0, 0, 0)
+			cursorInner.ZIndex = 8
+
+			local cursorInnerCorner = Instance.new("UICorner")
+			cursorInnerCorner.CornerRadius = UDim.new(0, 2)
+			cursorInnerCorner.Parent = cursorInner
+
+			-- Hue Selector (селектор оттенка)
+			hueSelectorOuter.Parent = colorPickerContainer
+			hueSelectorOuter.BorderColor3 = Color3.new(0, 0, 0)
+			hueSelectorOuter.Position = UDim2.new(0, 162, 0, 6)
+			hueSelectorOuter.Size = UDim2.new(0, 15, 0, 150)
+			hueSelectorOuter.ZIndex = 5
+
+			hueSelectorInner.Parent = hueSelectorOuter
+			hueSelectorInner.BackgroundColor3 = Color3.new(1, 1, 1)
+			hueSelectorInner.BorderSizePixel = 0
+			hueSelectorInner.Size = UDim2.new(1, 0, 1, 0)
+
+			local hueSequence = {}
+			for i = 0, 1, 0.1 do
+				table.insert(hueSequence, ColorSequenceKeypoint.new(i, Color3.fromHSV(i, 1, 1)))
+			end
+			hueSelectorGradient.Color = ColorSequence.new(hueSequence)
+			hueSelectorGradient.Rotation = 90
+			hueSelectorGradient.Parent = hueSelectorInner
+
+			hueCursor.Parent = hueSelectorInner
+			hueCursor.BackgroundColor3 = Color3.new(1, 1, 1)
+			hueCursor.AnchorPoint = Vector2.new(0, 0.5)
+			hueCursor.BorderColor3 = Color3.new(0, 0, 0)
+			hueCursor.Size = UDim2.new(1, 0, 0, 1)
+			hueCursor.ZIndex = 6
+
+			-- RGB и HEX поля
 			rgbFrame.Parent = colorPickerContainer
 			rgbFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			rgbFrame.BackgroundTransparency = 1.000
-			rgbFrame.Position = UDim2.new(0, 6, 0, 6)
-			rgbFrame.Size = UDim2.new(1, -12, 0, 0)
+			rgbFrame.Position = UDim2.new(0, 183, 0, 6)
+			rgbFrame.Size = UDim2.new(0, 207, 0, 150)
 
 			rgbLayout.Parent = rgbFrame
 			rgbLayout.SortOrder = Enum.SortOrder.LayoutOrder
 			rgbLayout.Padding = UDim.new(0, 4)
+
+			-- HEX поле
+			hexBoxOuter.Parent = rgbFrame
+			hexBoxOuter.BorderColor3 = Color3.new(0, 0, 0)
+			hexBoxOuter.Size = UDim2.new(1, 0, 0, 20)
+
+			hexBoxInner.Parent = hexBoxOuter
+			hexBoxInner.BackgroundColor3 = library.darkGray
+			hexBoxInner.BorderColor3 = library.lightGray
+			hexBoxInner.Size = UDim2.new(1, 0, 1, 0)
+
+			hexBox.Parent = hexBoxInner
+			hexBox.BackgroundTransparency = 1
+			hexBox.Position = UDim2.new(0, 5, 0, 0)
+			hexBox.Size = UDim2.new(1, -5, 1, 0)
+			hexBox.Font = library.Font
+			hexBox.PlaceholderColor3 = Color3.fromRGB(140, 140, 140)
+			hexBox.PlaceholderText = "Hex color"
+			hexBox.Text = "#FFFFFF"
+			hexBox.TextColor3 = Color3.fromRGB(190, 190, 190)
+			hexBox.TextSize = 14.000
+			hexBox.TextXAlignment = Enum.TextXAlignment.Left
 
 			local function createRGBInput(labelText, parent)
 				local label = Instance.new("TextLabel")
@@ -2761,16 +2872,85 @@ function library:Init(Config)
 
 			local currentColor = default
 			local isOpen = false
+			local hue, sat, val = Color3.toHSV(default)
+
+			local function updateColorFromHSV()
+				currentColor = Color3.fromHSV(hue, sat, val)
+				colorDisplay.BackgroundColor3 = currentColor
+				satVibMap.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+				
+				-- Обновление курсоров (используем Scale для относительного позиционирования)
+				cursorOuter.Position = UDim2.new(sat, 0, 1 - val, 0)
+				hueCursor.Position = UDim2.new(0, 0, hue, 0)
+				
+				-- Обновление полей
+				local r, g, b = math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255)
+				rBox.Text = tostring(r)
+				gBox.Text = tostring(g)
+				bBox.Text = tostring(b)
+				hexBox.Text = "#" .. currentColor:ToHex()
+				
+				callback(currentColor)
+			end
 
 			local function updateColorFromRGB()
 				local r = math.clamp(tonumber(rBox.Text) or 0, 0, 255)
 				local g = math.clamp(tonumber(gBox.Text) or 0, 0, 255)
 				local b = math.clamp(tonumber(bBox.Text) or 0, 0, 255)
 				currentColor = Color3.fromRGB(r, g, b)
-				colorDisplay.BackgroundColor3 = currentColor
-				callback(currentColor)
+				hue, sat, val = Color3.toHSV(currentColor)
+				updateColorFromHSV()
 			end
 
+			local function updateColorFromHex()
+				local hex = hexBox.Text:gsub("#", "")
+				local success, result = pcall(Color3.fromHex, hex)
+				if success and typeof(result) == "Color3" then
+					currentColor = result
+					hue, sat, val = Color3.toHSV(currentColor)
+					updateColorFromHSV()
+				else
+					hexBox.Text = "#" .. currentColor:ToHex()
+				end
+			end
+
+			-- Обработка SatVib Map
+			satVibMap.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 then
+					while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+						local mousePos = UserInputService:GetMouseLocation()
+						local mapPos = satVibMap.AbsolutePosition
+						local mapSize = satVibMap.AbsoluteSize
+						
+						local relX = math.clamp((mousePos.X - mapPos.X) / mapSize.X, 0, 1)
+						local relY = math.clamp((mousePos.Y - mapPos.Y) / mapSize.Y, 0, 1)
+						
+						sat = relX
+						val = 1 - relY
+						updateColorFromHSV()
+						
+						RunService.RenderStepped:Wait()
+					end
+				end
+			end)
+
+			-- Обработка Hue Selector
+			hueSelectorInner.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 then
+					while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+						local mousePos = UserInputService:GetMouseLocation()
+						local selectorPos = hueSelectorInner.AbsolutePosition
+						local selectorSize = hueSelectorInner.AbsoluteSize
+						
+						hue = math.clamp((mousePos.Y - selectorPos.Y) / selectorSize.Y, 0, 1)
+						updateColorFromHSV()
+						
+						RunService.RenderStepped:Wait()
+					end
+				end
+			end)
+
+			-- Обработка полей ввода
 			rBox.FocusLost:Connect(function()
 				updateColorFromRGB()
 			end)
@@ -2780,22 +2960,24 @@ function library:Init(Config)
 			bBox.FocusLost:Connect(function()
 				updateColorFromRGB()
 			end)
+			hexBox.FocusLost:Connect(function(enterPressed)
+				if enterPressed then
+					updateColorFromHex()
+				end
+			end)
 
-			-- Инициализация с цветом по умолчанию
-			local r, g, b = math.floor(default.R * 255), math.floor(default.G * 255), math.floor(default.B * 255)
-			rBox.Text = tostring(r)
-			gBox.Text = tostring(g)
-			bBox.Text = tostring(b)
+			-- Инициализация
+			updateColorFromHSV()
 
 			colorPickerButton.MouseButton1Click:Connect(function()
 				isOpen = not isOpen
 				colorPickerContainer.Visible = isOpen
 				if isOpen then
 					TweenService:Create(colorPickerContainer, TweenWrapper.Styles["colorpicker"], {
-						Size = UDim2.new(1, 0, 0, 80)
+						Size = UDim2.new(1, 0, 0, 162)
 					}):Play()
 					TweenService:Create(colorPickerFrame, TweenWrapper.Styles["colorpicker"], {
-						Size = UDim2.new(0, 396, 0, 104)
+						Size = UDim2.new(0, 396, 0, 186)
 					}):Play()
 				else
 					TweenService:Create(colorPickerContainer, TweenWrapper.Styles["colorpicker"], {
@@ -2810,11 +2992,8 @@ function library:Init(Config)
 			local ColorPickerFunctions = {}
 			function ColorPickerFunctions:SetColor(color)
 				currentColor = color
-				colorDisplay.BackgroundColor3 = currentColor
-				local r, g, b = math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255)
-				rBox.Text = tostring(r)
-				gBox.Text = tostring(g)
-				bBox.Text = tostring(b)
+				hue, sat, val = Color3.toHSV(currentColor)
+				updateColorFromHSV()
 				return self
 			end
 
